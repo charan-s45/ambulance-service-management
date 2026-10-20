@@ -11,8 +11,9 @@ services:
     plan: free
     region: singapore
     # Server: production dependencies only (skips the test-only MongoDB download).
-    # Client: needs its dev dependencies (Vite) to build.
-    buildCommand: npm ci --prefix server --omit=dev && npm ci --prefix client && npm run build --prefix client
+    # Client: needs its dev dependencies (Vite) to build. NODE_ENV=production
+    # makes npm skip them by default, hence --include=dev.
+    buildCommand: npm ci --prefix server --omit=dev && npm ci --prefix client --include=dev && npm run build --prefix client
     startCommand: npm start
     healthCheckPath: /api/health
     envVars:
