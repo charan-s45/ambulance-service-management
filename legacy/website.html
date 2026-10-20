@@ -1,0 +1,1387 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ambulance Service Management — Single File</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Gabarito:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+
+    <style>
+      :root {
+        --primary: #1a919c;
+        --accent: #1a919c;
+        --muted: #b5d3d3;
+        --card: rgba(255, 255, 255, 0.9);
+        --danger: #ff5722;
+        --success: #4caf50;
+      }
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        background: url("https://t3.ftcdn.net/jpg/12/61/68/06/360_F_1261680616_TmS9fiZaKpZG069jSbx0aSDUnslDzV5g.jpg")
+          no-repeat center center fixed;
+        background-size: cover;
+        background-color: #f7fbff;
+        font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+        color: #1a919c;
+      }
+      .navbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 22px;
+        background: var(--primary);
+        color: #fff;
+        position: sticky;
+        top: 0;
+        z-index: 999;
+        box-shadow: 0 3px 8px rgba(10, 40, 80, 0.15);
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 700;
+      }
+      .logo img {
+        width: 38px;
+        height: 38px;
+        border-radius: 6px;
+        background: #fff;
+        padding: 4px;
+      }
+      .navlinks {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+      }
+
+      .navlinks a {
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;
+        padding: 8px;
+        border-radius: 6px;
+      }
+      .navlinks a:hover {
+        background: rgba(255, 255, 255, 0.08);
+      }
+      .btn {
+        background: var(--accent);
+        color: #fff;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 700;
+      }
+      .btn.secondary {
+        background: #fff;
+        color: var(--primary);
+        border: 2px solid rgba(255, 255, 255, 0.12);
+      }
+      main {
+        padding: 28px;
+        max-width: 1100px;
+        margin: 20px auto;
+      }
+      section {
+        display: none;
+        padding: 18px 0;
+      }
+      section.active {
+        display: block;
+      }
+      h1,
+      h2 {
+        color: var(--primary);
+        margin: 6px 0 14px;
+      }
+      p.lead {
+        font-size: 1.05rem;
+        color: #12304a;
+        margin-bottom: 18px;
+      }
+      .hero {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 30px;
+        flex-wrap: wrap;
+        margin: 40px auto;
+        max-width: 900px;
+      }
+      .hero-card {
+        flex: 1;
+        min-width: 450px;
+        max-width: 600px;
+        background: var(--card);
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 6px 18px rgba(10, 40, 80, 0.15);
+      }
+      .hero h1 {
+        margin: 0 0 8px;
+      }
+      .stat-grid {
+        display: flex;
+        gap: 12px;
+        margin-top: 12px;
+      }
+      .stat {
+        background: linear-gradient(180deg, #b4dfe3, #b2e2e6);
+        padding: 10px;
+        border-radius: 8px;
+        flex: 1;
+        text-align: center;
+      }
+      .stat strong {
+        display: block;
+        font-size: 1.25rem;
+        color: var(--primary);
+      }
+      .card {
+        background: var(--card);
+        padding: 16px;
+        border-radius: 10px;
+        box-shadow: 0 6px 16px rgba(10, 40, 80, 0.06);
+        margin-bottom: 14px;
+      }
+      #booking .card {
+        max-width: 800px;
+        width: 90%;
+        padding: 30px;
+      }
+      .form {
+        max-width: 600px;
+        margin: 0 auto;
+      }
+      label {
+        display: block;
+        margin: 8px 0 6px;
+        font-weight: 700;
+      }
+      input[type="text"],
+      input[type="password"],
+      input[type="date"],
+      input[type="time"],
+      select,
+      textarea {
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #d8dbe0;
+        background: #fff;
+      }
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        padding: 10px;
+        border-bottom: 1px solid #eef3f8;
+        text-align: left;
+      }
+      th {
+        background: #f3f7fb;
+      }
+      .badge {
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-weight: 700;
+        font-size: 0.85rem;
+      }
+      .badge.new {
+        background: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffeeba;
+      }
+      .badge.enroute {
+        background: #ccdce9;
+        color: white;
+        border: 1px solid #d8ebf7;
+      }
+      .badge.arrived {
+        background: #fff0f0;
+        color: #7a1f1f;
+        border: 1px solid #ffd6d6;
+      }
+      .badge.complete {
+        background: var(--success);
+        color: #fff;
+      }
+      .small {
+        font-size: 0.9rem;
+        color: #4a6173;
+      }
+      footer {
+        padding: 16px;
+        text-align: center;
+        color: #1e293b;
+        margin-top: 20px;
+      }
+      @media (max-width: 900px) {
+        .hero {
+          grid-template-columns: 1fr;
+        }
+        .navlinks {
+          display: none;
+        }
+      }
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+      }
+      main {
+        flex: 1;
+      }
+      .services-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+      }
+      .services-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        margin-top: 20px;
+      }
+
+      #services .card {
+        text-align: center;
+        background: rgba(255, 255, 255, 0.9);
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s;
+      }
+
+      #services .card:hover {
+        transform: translateY(-5px);
+      }
+      #services .card i {
+        font-size: 40px;
+        color: var(--primary);
+        margin-bottom: 12px;
+      }
+
+      #services .card h3 {
+        margin: 8px 0;
+        color: #12304a;
+      }
+
+      #services .card p {
+        font-size: 14px;
+        color: #333;
+      }
+      #about .card {
+        background-color: rgba(255, 255, 255, 0.9);
+      }
+      #contact .card {
+        background-color: rgba(255, 255, 255, 0.9);
+        width: 400px;
+        height: 150px;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+      #booking .card {
+        width: 600px;
+        height: 350px;
+      }
+      #confirm .card {
+        max-width: 600px;
+        margin: 0 auto;
+      }
+      #confirm .card i {
+        color: var(--success);
+      }
+      footer {
+        background: #1a919c;
+        color: #fff;
+        text-align: center;
+        padding: 12px;
+        font-size: 0.9rem;
+        box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.2);
+      }
+    </style>
+  </head>
+  <body>
+    <header class="navbar">
+      <div class="logo">
+        <img
+          src="https://cdn-icons-png.flaticon.com/512/2966/2966327.png"
+          alt="logo"
+        />
+        <div>
+          <div style="font-size: 20px">Ambulance Service</div>
+          <div style="font-size: 15px; opacity: 0.9">Management System</div>
+        </div>
+      </div>
+      <nav class="navlinks" id="main-nav">
+        <a href="#" data-show="home" onclick="showSection('home')">Home</a>
+        <a href="#" data-show="about" onclick="showSection('about')">About</a>
+        <a href="#" data-show="services" onclick="showSection('services')"
+          >Services</a
+        >
+        <a href="#" data-show="contact" onclick="showSection('contact')"
+          >Contact</a
+        >
+        
+          href="#"
+          id="nav-dashboard"
+          onclick="goToDashboard()"
+          style="display: none"
+          >Dashboard</a
+        >
+        <a href="#" id="nav-login" onclick="showSection('login')"
+          >Login / SignUp</a
+        >
+        <a href="#" id="nav-logout" onclick="logout()" style="display: none"
+          >Logout</a
+        >
+      </nav>
+    </header>
+    <main>
+      <section id="home" class="active">
+        <div class="hero">
+          <div class="hero-card">
+            <center>
+              <h1>Every second counts — Your life, our priority</h1>
+            </center>
+            <p class="lead">
+              Fast, reliable ambulance services with real-time tracking and 24/7
+              Support
+            </p>
+            <div class="stat-grid">
+              <div class="stat">
+                <small>Active Requests</small
+                ><strong id="ui-active-requests">0</strong>
+              </div>
+              <div class="stat">
+                <small>Available Ambulances</small
+                ><strong id="ui-available-amb">0</strong>
+              </div>
+              <div class="stat">
+                <small>Total Drivers</small
+                ><strong id="ui-total-drivers">0</strong>
+              </div>
+            </div>
+          </div>
+          <div class="hero-card">
+            <h3>Quick Actions</h3>
+            <div
+              style="
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                margin-top: 10px;
+              "
+            >
+              <button class="btn" onclick="showSection('booking')">
+                Book an Ambulance
+              </button>
+              <button class="btn secondary" onclick="showSection('services')">
+                View Services
+              </button>
+              <button class="btn" onclick="showSection('contact')">
+                Contact Us
+              </button>
+            </div>
+          </div>
+          <div
+            class="hero-card"
+            id="user-tracking-card"
+            style="display: none; flex: 1 1 100%"
+          >
+            <h3><i class="fas fa-route"></i> Your Active Booking Status</h3>
+            <div id="user-tracking-content"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="about">
+        <h1>About Us</h1>
+        <div class="card">
+          <p>
+            Our Ambulance Service Management System is designed to provide
+            efficient and reliable emergency medical services. We aim to connect
+            patients with the nearest available ambulance quickly and safely.
+            Our platform ensures smooth communication between ambulance staff,
+            hospitals, and patients, reducing delays during critical situations.
+            We focus on streamlining ambulance scheduling, patient information
+            management, and service monitoring to enhance overall healthcare
+            support. Our system allows easy requesting, dispatching, and
+            managing ambulance services with minimal effort. With a
+            user-friendly interface, hospitals and service providers can
+            maintain records, track service history, and manage operations
+            effectively. Our goal is to improve response times and optimize
+            ambulance services for the well-being of our community. We are
+            committed to delivering a secure, reliable, and organized solution
+            for emergency medical care.
+          </p>
+        </div>
+      </section>
+      <section id="services">
+        <h1>Services</h1>
+        <div class="services-grid">
+          <div class="card">
+            <i class="fas fa-ambulance"></i>
+            <h3>Emergency Response</h3>
+            <p>Rapid deployment for critical situations.</p>
+          </div>
+
+          <div class="card">
+            <i class="fas fa-clock"></i>
+            <h3>24/7 Support</h3>
+            <p>Our team is available anytime.</p>
+          </div>
+
+          <div class="card">
+            <i class="fas fa-hospital"></i>
+            <h3>Non-Emergency Transport</h3>
+            <p>Scheduled transfers and appointments.</p>
+          </div>
+
+          <div class="card">
+            <i class="fas fa-heartbeat"></i>
+            <h3>Patient Care</h3>
+            <p>Compassionate care during transport.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact">
+        <h1>Contact Us</h1>
+        <div class="card">
+          <p><strong>Phone:</strong> +1 (123) 456-7890</p>
+          <p><strong>Email:</strong> help@ambulanceservice.com</p>
+          <p><strong>Address:</strong> 123 Emergency Road, City</p>
+        </div>
+      </section>
+
+      <section id="login">
+        <h1>Login / Register</h1>
+        <div class="card" style="display: flex; gap: 18px; flex-wrap: wrap">
+          <div style="flex: 1; min-width: 280px">
+            <h3>Login</h3>
+            <form id="login-form" class="form" onsubmit="handleLogin(event)">
+              <label for="login-email">Email</label>
+              <input
+                id="login-email"
+                type="text"
+                required
+                placeholder="Enter your email"
+              />
+              <label for="login-pass">Password</label>
+              <input
+                id="login-pass"
+                type="password"
+                required
+                placeholder=" Enter your password"
+              />
+              <label for="login-role">Role (select)</label>
+              <select id="login-role">
+                <option value="user">User</option>
+                <option value="driver">Driver</option>
+                <option value="admin">Admin</option>
+              </select>
+              <div style="margin-top: 10px; display: flex; gap: 10px">
+                <button class="btn" type="submit">Login</button>
+              </div>
+            </form>
+          </div>
+
+          <div style="flex: 1; min-width: 280px">
+            <h3>Register</h3>
+            <form
+              id="register-form"
+              class="form"
+              onsubmit="handleRegister(event)"
+            >
+              <label for="reg-email">Email</label>
+              <input
+                id="reg-email"
+                type="text"
+                required
+                placeholder="Enter your email"
+              />
+              <label for="reg-pass">Password</label>
+              <input
+                id="reg-pass"
+                type="password"
+                required
+                placeholder="choose a password"
+              />
+              <label for="reg-role">Register As</label>
+              <select id="reg-role">
+                <option value="user">User</option>
+                <option value="driver">Driver</option>
+                <option value="admin">Admin</option>
+              </select>
+              <div style="margin-top: 10px">
+                <button class="btn" type="submit">Create Account</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <section id="booking">
+        <h1>Book an Ambulance</h1>
+        <div class="card">
+          <form id="booking-form" class="form" onsubmit="handleBooking(event)">
+            <label>Pickup Location</label>
+            <input
+              id="b-pickup"
+              type="text"
+              required
+              placeholder="Enter pickup address"
+            />
+            <label>Destination</label>
+            <input
+              id="b-dest"
+              type="text"
+              required
+              placeholder="Enter destination"
+            />
+            <div class="grid-2">
+              <div>
+                <label>Date</label>
+                <input id="b-date" type="date" required />
+              </div>
+              <div>
+                <label>Time</label>
+                <input id="b-time" type="time" required />
+              </div>
+            </div>
+            <div style="margin-top: 12px">
+              <button class="btn" type="submit">Confirm Booking</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section id="confirm">
+        <h1>Booking Confirmation</h1>
+        <div class="card" id="confirm-card"></div>
+      </section>
+
+      <section id="feedback">
+        <h1>Service Feedback</h1>
+        <div class="card">
+          <p class="lead">
+            We value your opinion. Please provide feedback on your recent
+            ambulance service with ID: <strong id="feedback-req-id"></strong>.
+          </p>
+          <form
+            id="feedback-form"
+            class="form"
+            onsubmit="handleFeedback(event)"
+          >
+            <input type="hidden" id="feedback-request-id" />
+            <label for="f-rating">Overall Rating (1-5)</label>
+            <select id="f-rating" required>
+              <option value="">-- Select Rating --</option>
+              <option value="5">5 - Excellent</option>
+              <option value="4">4 - Good</option>
+              <option value="3">3 - Fair</option>
+              <option value="2">2 - Poor</option>
+              <option value="1">1 - Very Poor</option>
+            </select>
+            <label for="f-comments">Comments</label>
+            <textarea
+              id="f-comments"
+              rows="4"
+              placeholder="Share your experience (optional)"
+            ></textarea>
+            <div style="margin-top: 12px">
+              <button class="btn" type="submit">Submit Feedback</button>
+            </div>
+          </form>
+        </div>
+      </section>
+      <section id="admin">
+        <h1>Admin Dashboard — Manage Requests</h1>
+
+        <div class="card">
+          <strong>Overview</strong>
+          <div style="margin-top: 8px" class="small">
+            Active Requests: <span id="admin-active">0</span> &nbsp; • &nbsp;
+            Available Ambulances: <span id="admin-available">0</span> &nbsp; •
+            &nbsp; Total Drivers: <span id="admin-drivers">0</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Requests</h3>
+          <table id="admin-requests-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Pickup</th>
+                <th>Destination</th>
+                <th>When</th>
+                <th>Status</th>
+                <th>Ambulance</th>
+                <th>Driver</th>
+                <th>Feedback</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <div class="card">
+          <h3>Ambulances</h3>
+          <table id="admin-ambulances-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Vehicle</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="driver">
+        <h1>Driver Dashboard</h1>
+        <div class="card">
+          <h3>Your Current Assignments</h3>
+          <table id="driver-requests-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Pickup</th>
+                <th>Destination</th>
+                <th>When</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      &copy; <span id="year"></span> Ambulance Service Management - All Rights
+      Reserved
+    </footer>
+
+    <script>
+      /**********************
+       * Data & boot logic
+       **********************/
+      const STORAGE_KEYS = {
+        USERS: "asm_users_v1",
+        REQS: "asm_reqs_v1",
+        AMBS: "asm_ambs_v1",
+        CUR: "asm_current_v1",
+        FEEDBACK: "asm_feedback_v1",
+      };
+      let users = [],
+        requests = [],
+        ambulances = [],
+        currentUser = null,
+        feedback = [];
+
+      function seedDefaults() {
+        if (!localStorage.getItem(STORAGE_KEYS.USERS)) {
+          users = [
+            {
+              email: "admin@example.com",
+              pass: "admin123",
+              role: "admin",
+              name: "Admin",
+            },
+            {
+              email: "driver@example.com",
+              pass: "driver123",
+              role: "driver",
+              name: "Ramesh,Suresh",
+            },
+            {
+              email: "user@example.com",
+              pass: "user123",
+              role: "user",
+              name: "Kavya",
+            },
+          ];
+          localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
+        } else users = JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS));
+
+        if (!localStorage.getItem(STORAGE_KEYS.AMBS)) {
+          ambulances = [
+            { id: "A101", vehicle: "Ambulance A101", status: "available" },
+            { id: "A102", vehicle: "Ambulance A102", status: "available" },
+            { id: "A103", vehicle: "Ambulance A103", status: "maintenance" },
+          ];
+          localStorage.setItem(STORAGE_KEYS.AMBS, JSON.stringify(ambulances));
+        } else ambulances = JSON.parse(localStorage.getItem(STORAGE_KEYS.AMBS));
+
+        if (!localStorage.getItem(STORAGE_KEYS.REQS)) {
+          requests = [
+            {
+              id: "REQ001",
+              pickup: "Main St.",
+              dest: "City General Hospital",
+              datetime: "2025-09-01 10:30",
+              status: "new",
+              ambulanceId: null,
+              driverEmail: null,
+              userEmail: "user@example.com",
+              eta: null,
+              etaConfirmed: false,
+            },
+            {
+              id: "REQ002",
+              pickup: "Oak Ave",
+              dest: "St. Marys Clinic",
+              datetime: "2025-09-02 15:00",
+              status: "completed",
+              ambulanceId: "A102",
+              driverEmail: "driver@example.com",
+              userEmail: "user@example.com",
+              eta: null,
+              etaConfirmed: false,
+            },
+          ];
+          localStorage.setItem(STORAGE_KEYS.REQS, JSON.stringify(requests));
+        } else requests = JSON.parse(localStorage.getItem(STORAGE_KEYS.REQS));
+
+        if (!localStorage.getItem(STORAGE_KEYS.FEEDBACK)) {
+          feedback = [];
+          localStorage.setItem(STORAGE_KEYS.FEEDBACK, JSON.stringify(feedback));
+        } else
+          feedback = JSON.parse(localStorage.getItem(STORAGE_KEYS.FEEDBACK));
+
+        currentUser = JSON.parse(
+          localStorage.getItem(STORAGE_KEYS.CUR) || "null",
+        );
+      }
+
+      function saveAll() {
+        localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
+        localStorage.setItem(STORAGE_KEYS.REQS, JSON.stringify(requests));
+        localStorage.setItem(STORAGE_KEYS.AMBS, JSON.stringify(ambulances));
+        localStorage.setItem(STORAGE_KEYS.CUR, JSON.stringify(currentUser));
+        localStorage.setItem(STORAGE_KEYS.FEEDBACK, JSON.stringify(feedback));
+        updateCounters();
+      }
+
+      function uid(prefix = "ID") {
+        return prefix + Math.floor(Math.random() * 900000 + 100000);
+      }
+
+      /**********************
+       * UI helpers & routing
+       **********************/
+      function showSection(id) {
+        document
+          .querySelectorAll("main section")
+          .forEach((s) => s.classList.remove("active"));
+        const s = document.getElementById(id);
+        if (s) s.classList.add("active");
+        window.scrollTo(0, 0);
+        if (id === "admin") renderAdmin();
+        if (id === "driver") renderDriver();
+        if (id === "home") {
+          updateCounters();
+          renderUserTracking();
+        }
+        if (id === "confirm") {
+        }
+      }
+      function goToDashboard() {
+        if (!currentUser) {
+          showSection("login");
+          return;
+        }
+        if (currentUser.role === "admin") showSection("admin");
+        else if (currentUser.role === "driver") showSection("driver");
+        else showSection("home");
+      }
+      function updateNav() {
+        document.getElementById("nav-login").style.display = currentUser
+          ? "none"
+          : "inline-block";
+        document.getElementById("nav-logout").style.display = currentUser
+          ? "inline-block"
+          : "none";
+        document.getElementById("nav-dashboard").style.display = currentUser
+          ? "inline-block"
+          : "none";
+      }
+      function updateCounters() {
+        document.getElementById("ui-active-requests").textContent =
+          requests.filter((r) => r.status !== "completed").length;
+        document.getElementById("ui-available-amb").textContent =
+          ambulances.filter((a) => a.status === "available").length;
+        document.getElementById("ui-total-drivers").textContent = users.filter(
+          (u) => u.role === "driver",
+        ).length;
+        document.getElementById("admin-active").textContent = requests.filter(
+          (r) => r.status !== "completed",
+        ).length;
+        document.getElementById("admin-available").textContent =
+          ambulances.filter((a) => a.status === "available").length;
+        document.getElementById("admin-drivers").textContent = users.filter(
+          (u) => u.role === "driver",
+        ).length;
+      }
+      function handleLogin(e) {
+        e.preventDefault();
+        const email = document
+          .getElementById("login-email")
+          .value.trim()
+          .toLowerCase();
+        const pass = document.getElementById("login-pass").value;
+        const selectRole = document.getElementById("login-role").value;
+
+        const u = users.find((x) => x.email === email);
+        if (!u) {
+          alert("User not found. Please register first or use test accounts.");
+          return;
+        }
+        if (u.pass !== pass) {
+          alert("Incorrect password.");
+          return;
+        }
+        currentUser = { email: u.email, role: u.role, name: u.name || u.email };
+        localStorage.setItem(STORAGE_KEYS.CUR, JSON.stringify(currentUser));
+        updateNav();
+        alert(
+          `Welcome, ${currentUser.name || currentUser.email} (${currentUser.role})`,
+        );
+        if (currentUser.role === "admin") {
+          showSection("admin");
+        } else if (currentUser.role === "driver") {
+          showSection("driver");
+        } else if (currentUser.role === "user") {
+          const completedWithoutFeedback = requests.find(
+            (r) =>
+              r.userEmail === currentUser.email &&
+              r.status === "completed" &&
+              !feedback.some((f) => f.reqId === r.id),
+          );
+          if (completedWithoutFeedback) {
+            openFeedbackForm(completedWithoutFeedback.id);
+          } else {
+            showSection("booking");
+          }
+        } else {
+          showSection("home");
+        }
+        renderAdmin();
+        renderDriver();
+      }
+      function handleRegister(e) {
+        e.preventDefault();
+        const email = document
+          .getElementById("reg-email")
+          .value.trim()
+          .toLowerCase();
+        const pass = document.getElementById("reg-pass").value;
+        const role = document.getElementById("reg-role").value;
+        if (users.some((u) => u.email === email)) {
+          alert("User with this email already exists. Please login.");
+          return;
+        }
+        users.push({ email, pass, role, name: email.split("@")[0] });
+        saveAll();
+        alert("Account created. You can now login.");
+        document.getElementById("register-form").reset();
+      }
+      function logout() {
+        currentUser = null;
+        localStorage.removeItem(STORAGE_KEYS.CUR);
+        updateNav();
+        showSection("home");
+      }
+      function prefillDefaults() {
+        document.getElementById("login-email").value = "admin@example.com";
+        document.getElementById("login-pass").value = "admin123";
+        document.getElementById("login-role").value = "admin";
+      }
+      /**********************
+       * Booking functions
+       **********************/
+      function handleBooking(e) {
+        e.preventDefault();
+        if (!currentUser || currentUser.role !== "user") {
+          alert("You must be logged in as a User to book an ambulance.");
+          showSection("login");
+          return;
+        }
+        const pickup = document.getElementById("b-pickup").value.trim();
+        const dest = document.getElementById("b-dest").value.trim();
+        const date = document.getElementById("b-date").value;
+        const time = document.getElementById("b-time").value;
+        if (!pickup || !dest || !date || !time) {
+          alert("Please fill all fields");
+          return;
+        }
+        const id = uid("REQ");
+        const dt = date + " " + time;
+
+        const initialEta = Math.floor(Math.random() * 16) + 9; // 9–24 mins
+
+        const req = {
+          id,
+          pickup,
+          dest,
+          datetime: dt,
+          status: "new",
+          ambulanceId: null,
+          driverEmail: null,
+          userEmail: currentUser.email,
+          eta: initialEta,
+          etaConfirmed: false,
+        };
+        requests.unshift(req);
+        saveAll();
+
+        document.getElementById("confirm-card").innerHTML = `
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+          <i class="fas fa-circle-check" style="font-size:28px;"></i>
+          <h3 style="margin:0;">Booking Confirmed!</h3>
+        </div>
+        <p><strong>Booking ID:</strong> ${id}</p>
+        <p><strong>Pickup:</strong> ${pickup}</p>
+        <p><strong>Destination:</strong> ${dest}</p>
+        <p><strong>Scheduled:</strong> ${dt}</p>
+        <p><strong>Estimated Arrival:</strong>
+           <span style="font-size:1.2rem;color:var(--danger);">${initialEta} mins</span>
+           <span class="small">(approximate — will update once a driver is assigned)</span>
+        </p>
+        <p class="small">You can track live status anytime from the Home page.</p>
+        <div style="margin-top: 15px;"><button class="btn secondary" onclick="showSection('home')">Go to Home & Status</button></div>
+      `;
+        document.getElementById("booking-form").reset();
+        showSection("confirm");
+        renderAdmin();
+        renderDriver();
+      }
+      function showRegister() {
+        document.getElementById("login-form").style.display = "none";
+        document.getElementById("register-form").style.display = "block";
+      }
+      function showLogin() {
+        document.getElementById("register-form").style.display = "none";
+        document.getElementById("login-form").style.display = "block";
+      }
+
+      function renderUserTracking() {
+        const card = document.getElementById("user-tracking-card");
+        const content = document.getElementById("user-tracking-content");
+        card.style.display = "none";
+
+        if (!currentUser || currentUser.role !== "user") return;
+
+        const activeRequest = requests.find(
+          (r) => r.userEmail === currentUser.email && r.status !== "completed",
+        );
+
+        if (!activeRequest) {
+          const completedWithoutFeedback = requests.find(
+            (r) =>
+              r.userEmail === currentUser.email &&
+              r.status === "completed" &&
+              !feedback.some((f) => f.reqId === r.id),
+          );
+          if (completedWithoutFeedback) {
+            content.innerHTML = `<p class="lead" style="color: var(--danger);">Your last service is complete! Please submit your feedback.</p>
+                               <button class="btn" onclick="openFeedbackForm('${completedWithoutFeedback.id}')">Give Feedback for ${completedWithoutFeedback.id}</button>`;
+            card.style.display = "block";
+          }
+          return;
+        }
+
+        const driver = users.find((u) => u.email === activeRequest.driverEmail);
+        const amb = ambulances.find((a) => a.id === activeRequest.ambulanceId);
+        const statusBadge = statusToBadge(activeRequest.status);
+
+        const etaDisplay = activeRequest.eta
+          ? `<p><strong>${activeRequest.etaConfirmed ? "ETA to Pickup" : "Estimated Arrival"}:</strong>
+               <span style="font-size:1.2rem; color:var(--danger);">${activeRequest.eta} mins</span>
+               ${!activeRequest.etaConfirmed ? '<span class="small"> (approximate, pending driver confirmation)</span>' : ""}
+             </p>`
+          : '<p class="small">ETA calculation pending...</p>';
+
+        content.innerHTML = `
+        <p><strong>Request ID:</strong> ${activeRequest.id}</p>
+        <p><strong>Status:</strong> ${statusBadge}</p>
+        ${etaDisplay}
+        <p class="small">
+          <i class="fas fa-car-side"></i> 
+          ${driver ? driver.name : "Unassigned Driver"} 
+          | 
+          <i class="fas fa-truck-medical"></i> 
+          ${amb ? amb.vehicle : "Unassigned Ambulance"}
+        </p>
+        <p class="small" style="margin-top: 10px;">Pickup: <strong>${activeRequest.pickup}</strong></p>
+        <p class="small">Destination: <strong>${activeRequest.dest}</strong></p>
+      `;
+        card.style.display = "block";
+
+        setTimeout(renderUserTracking, 5000);
+      }
+
+      function openFeedbackForm(reqId) {
+        const req = requests.find((r) => r.id === reqId);
+        if (
+          !req ||
+          req.userEmail !== currentUser.email ||
+          req.status !== "completed"
+        ) {
+          alert("Cannot open feedback form for this request.");
+          showSection("home");
+          return;
+        }
+
+        if (feedback.some((f) => f.reqId === reqId)) {
+          alert("Feedback already submitted for this request.");
+          showSection("home");
+          return;
+        }
+
+        document.getElementById("feedback-request-id").value = reqId;
+        document.getElementById("feedback-req-id").textContent = reqId;
+        document.getElementById("feedback-form").reset();
+        showSection("feedback");
+      }
+
+      function handleFeedback(e) {
+        e.preventDefault();
+        const reqId = document.getElementById("feedback-request-id").value;
+        const rating = document.getElementById("f-rating").value;
+        const comments = document.getElementById("f-comments").value.trim();
+
+        if (!rating) {
+          alert("Please select an overall rating.");
+          return;
+        }
+
+        const newFeedback = {
+          reqId,
+          userEmail: currentUser.email,
+          rating: parseInt(rating),
+          comments: comments,
+          date: new Date().toISOString().split("T")[0],
+        };
+
+        feedback.unshift(newFeedback);
+        saveAll();
+
+        alert(`Thank you for your feedback! Rating: ${rating}/5`);
+        showSection("home");
+        renderAdmin();
+      }
+
+      function renderAdmin() {
+        const tbody = document.querySelector("#admin-requests-table tbody");
+        tbody.innerHTML = "";
+        const sortedRequests = [...requests].sort((a, b) =>
+          b.id.localeCompare(a.id),
+        );
+
+        sortedRequests.forEach((r) => {
+          const amb = r.ambulanceId || "-";
+          const drv = r.driverEmail ? r.driverEmail.split("@")[0] : "-";
+          const statusBadge = statusToBadge(r.status);
+          const fb = feedback.find((f) => f.reqId === r.id);
+          const feedbackDisplay = fb
+            ? `${fb.rating}/5`
+            : r.status === "completed"
+              ? "Pending"
+              : "-";
+
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+          <td>${r.id}</td>
+          <td>${escapeHtml(r.pickup)}</td>
+          <td>${escapeHtml(r.dest)}</td>
+          <td><div class="small">${r.datetime}</div></td>
+          <td>${statusBadge}</td>
+          <td>${amb}</td>
+          <td>${drv}</td>
+          <td>${feedbackDisplay}</td> <td>
+            ${
+              r.status !== "completed"
+                ? `
+              <select id="assignAmb_${r.id}">
+                <option value="">-- Assign Ambulance --</option>
+                ${ambulances.map((a) => `<option value="${a.id}" ${r.ambulanceId === a.id ? "selected" : ""}>${a.id} (${a.status})</option>`).join("")}
+              </select>
+              <select id="assignDrv_${r.id}">
+                <option value="">-- Assign Driver --</option>
+                ${users
+                  .filter((u) => u.role === "driver")
+                  .map(
+                    (d) =>
+                      `<option value="${d.email}" ${r.driverEmail === d.email ? "selected" : ""}>${d.name || d.email}</option>`,
+                  )
+                  .join("")}
+              </select>
+              <div style="margin-top:6px;display:flex;gap:6px; flex-wrap:wrap;">
+                <button class="btn" onclick="assignAmbDriver('${r.id}')">Assign</button>
+                <input type="number" id="eta_${r.id}" placeholder="ETA (mins)" style="width: 80px;" value="${r.eta || ""}"> 
+                <button class="btn secondary" onclick="updateStatusAndETA('${r.id}','enroute')">En route</button>
+                <button class="btn secondary" onclick="updateStatusAndETA('${r.id}','arrived')">Arrived</button>
+                <button class="btn" style="background:var(--success)" onclick="updateStatusAndETA('${r.id}','completed')">Complete</button>
+              </div>
+            `
+                : "Completed"
+            }
+          </td>
+        `;
+          tbody.appendChild(tr);
+        });
+        const atbody = document.querySelector("#admin-ambulances-table tbody");
+        atbody.innerHTML = "";
+        ambulances.forEach((a) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `<td>${a.id}</td><td>${escapeHtml(a.vehicle)}</td><td>${a.status}</td>`;
+          atbody.appendChild(tr);
+        });
+        updateCounters();
+      }
+
+      function updateStatusAndETA(reqId, newStatus) {
+        const req = requests.find((r) => r.id === reqId);
+        if (!req) {
+          alert("Request not found");
+          return;
+        }
+
+        const etaInput = document.getElementById(`eta_${reqId}`);
+        const newETA = etaInput ? parseInt(etaInput.value) : null;
+
+        if (newStatus === "enroute" && (isNaN(newETA) || newETA <= 0)) {
+          alert(
+            'Please set a valid Estimated Time of Arrival (ETA) in minutes before setting status to "En route".',
+          );
+          return;
+        }
+
+        req.eta = newETA > 0 ? newETA : null;
+        req.etaConfirmed = true;
+
+        let map = {
+          enroute: "enroute",
+          arrived: "arrived",
+          completed: "completed",
+          pending: "pending",
+          new: "new",
+        };
+        req.status = map[newStatus] || newStatus;
+
+        if (req.status === "completed" && req.ambulanceId) {
+          ambulances = ambulances.map((a) =>
+            a.id === req.ambulanceId ? { ...a, status: "available" } : a,
+          );
+          req.eta = null;
+          req.etaConfirmed = false;
+        }
+
+        saveAll();
+        renderAdmin();
+        renderDriver();
+        renderUserTracking();
+
+        if (
+          req.status === "completed" &&
+          req.userEmail === currentUser?.email
+        ) {
+          openFeedbackForm(reqId);
+        }
+      }
+
+      function assignAmbDriver(reqId) {
+        const ambSel = document.getElementById(`assignAmb_${reqId}`);
+        const drvSel = document.getElementById(`assignDrv_${reqId}`);
+        const ambId = ambSel ? ambSel.value : "";
+        const drvEmail = drvSel ? drvSel.value : "";
+        const req = requests.find((r) => r.id === reqId);
+
+        if (!req) {
+          alert("Request not found");
+          return;
+        }
+
+        if (ambId) {
+          const amb = ambulances.find((a) => a.id === ambId);
+          if (amb && amb.status !== "available" && amb.id !== req.ambulanceId) {
+            if (!confirm("Ambulance not available. Force assign anyway?"))
+              return;
+          }
+          if (req.ambulanceId && req.ambulanceId !== ambId) {
+            ambulances = ambulances.map((a) =>
+              a.id === req.ambulanceId ? { ...a, status: "available" } : a,
+            );
+          }
+          ambulances = ambulances.map((a) =>
+            a.id === ambId ? { ...a, status: "pending" } : a,
+          );
+          req.ambulanceId = ambId;
+        }
+
+        if (drvEmail) {
+          req.driverEmail = drvEmail;
+        }
+
+        if (req.status === "new" || req.status === "pending")
+          req.status = "pending";
+
+        saveAll();
+        renderAdmin();
+        renderDriver();
+        renderUserTracking();
+        alert(
+          `Assigned${ambId ? " ambulance " + ambId : ""}${drvEmail ? " driver" : ""}`,
+        );
+      }
+
+      function statusToBadge(status) {
+        const s = (status || "").toLowerCase();
+        if (s === "new") return '<span class="badge new">New</span>';
+        if (s === "pending") return '<span class="badge new">Pending</span>';
+        if (s === "enroute")
+          return '<span class="badge enroute" style="background:var(--primary); color:white;">En route</span>';
+        if (s === "arrived")
+          return '<span class="badge arrived" style="background:var(--danger); color:white;">Arrived</span>';
+        if (s === "completed")
+          return '<span class="badge complete">Completed</span>';
+        return `<span class="badge">${escapeHtml(status || "")}</span>`;
+      }
+      function renderDriver() {
+        const tbody = document.querySelector("#driver-requests-table tbody");
+        tbody.innerHTML = "";
+        if (!currentUser || currentUser.role !== "driver") {
+          tbody.innerHTML =
+            '<tr><td colspan="6">No driver logged in. Please login as driver to see assignments.</td></tr>';
+          return;
+        }
+        const myReqs = requests.filter(
+          (r) => r.driverEmail === currentUser.email,
+        );
+        if (myReqs.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6">No assignments yet.</td></tr>';
+          return;
+        }
+        myReqs.forEach((r) => {
+          const eta = r.eta ? `(ETA: ${r.eta} mins)` : "";
+          const tr = document.createElement("tr");
+          tr.innerHTML = `<td>${r.id}</td><td>${escapeHtml(r.pickup)}</td><td>${escapeHtml(r.dest)}</td><td class="small">${r.datetime}</td><td>${statusToBadge(r.status)} ${eta}</td>
+          <td>
+            <div style="display:flex;gap:6px">
+              <button class="btn secondary" onclick="driverUpdate('${r.id}','enroute')">En route</button>
+              <button class="btn secondary" onclick="driverUpdate('${r.id}','arrived')">Arrived</button>
+              <button class="btn" style="background:var(--success)" onclick="driverUpdate('${r.id}','completed')">Complete</button>
+            </div>
+          </td>`;
+          tbody.appendChild(tr);
+        });
+      }
+      function driverUpdate(reqId, status) {
+        const req = requests.find((r) => r.id === reqId);
+        if (!req) return;
+        if (
+          !currentUser ||
+          currentUser.role !== "driver" ||
+          req.driverEmail !== currentUser.email
+        ) {
+          alert("You are not assigned to this request.");
+          return;
+        }
+        changeStatus(reqId, status);
+      }
+      function changeStatus(reqId, newStatus) {
+        const req = requests.find((r) => r.id === reqId);
+        if (!req) {
+          alert("Request not found");
+          return;
+        }
+        let map = {
+          enroute: "enroute",
+          arrived: "arrived",
+          completed: "completed",
+          pending: "pending",
+          new: "new",
+        };
+        req.status = map[newStatus] || newStatus;
+        if (req.status === "completed" && req.ambulanceId) {
+          ambulances = ambulances.map((a) =>
+            a.id === req.ambulanceId ? { ...a, status: "available" } : a,
+          );
+          req.eta = null;
+          req.etaConfirmed = false;
+        }
+        saveAll();
+        renderAdmin();
+        renderDriver();
+        renderUserTracking();
+      }
+      function escapeHtml(s) {
+        if (!s) return "";
+        return s
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;");
+      }
+      document.addEventListener("DOMContentLoaded", () => {
+        seedDefaults();
+        updateNav();
+        renderAdmin();
+        renderDriver();
+        updateCounters();
+        document.getElementById("year").textContent = new Date().getFullYear();
+        currentUser = JSON.parse(
+          localStorage.getItem(STORAGE_KEYS.CUR) || "null",
+        );
+        updateNav();
+        if (currentUser) {
+          renderUserTracking();
+        }
+        document.getElementById("nav-dashboard").onclick = (e) => {
+          e.preventDefault();
+          goToDashboard();
+        };
+      });
+      function renderAll() {
+        renderAdmin();
+        renderDriver();
+        updateCounters();
+        renderUserTracking();
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "ambulance-service-management",
+  "private": true,
+  "description": "Convenience scripts. The real projects are in ./server (Express API) and ./client (React app).",
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "install:all": "npm install --prefix server && npm install --prefix client",
+    "dev:server": "npm run dev --prefix server",
+    "dev:client": "npm run dev --prefix client",
+    "test": "npm test --prefix server && npm test --prefix client",
+    "build": "npm run build --prefix client",
+    "start": "npm run prod --prefix server"
+  }
+}

@@ -1,0 +1,626 @@
+/* ------------------------------------------------------------------
+   Ported from the original website.html <style> block.
+   Colours, fonts, cards, badges and layout are unchanged; additions
+   (mobile menu, notices, tables on small screens, admin forms) are
+   marked "NEW" and fixes are marked "FIX".
+   ------------------------------------------------------------------ */
+:root {
+  --primary: #1a919c;
+  --accent: #1a919c;
+  --muted: #b5d3d3;
+  --card: rgba(255, 255, 255, 0.9);
+  --danger: #ff5722;
+  --success: #4caf50;
+}
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+body {
+  background: url("https://t3.ftcdn.net/jpg/12/61/68/06/360_F_1261680616_TmS9fiZaKpZG069jSbx0aSDUnslDzV5g.jpg") no-repeat
+    center center fixed;
+  background-size: cover;
+  background-color: #f7fbff;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+  color: #1a919c;
+}
+/* React mounts into #root, so the original body flex layout moves here */
+#root {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 22px;
+  background: var(--primary);
+  color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  box-shadow: 0 3px 8px rgba(10, 40, 80, 0.15);
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+}
+.logo img {
+  width: 38px;
+  height: 38px;
+  border-radius: 6px;
+  background: #fff;
+  padding: 4px;
+}
+.navlinks {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+.navlinks a,
+.navlink-button {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 8px;
+  border-radius: 6px;
+  font: inherit;
+  font-weight: 600;
+}
+.navlink-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.navlinks a:hover,
+.navlink-button:hover,
+.navlinks a.active {
+  background: rgba(255, 255, 255, 0.08);
+}
+.navlinks a.active {
+  background: rgba(255, 255, 255, 0.16);
+}
+/* NEW: mobile menu button (the original hid the links with no alternative) */
+.menu-toggle {
+  display: none;
+  background: none;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  color: #fff;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.btn {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 700;
+  font-family: inherit;
+  font-size: 0.95rem;
+  text-decoration: none;
+  text-align: center;
+}
+.btn.secondary {
+  background: #fff;
+  color: var(--primary);
+  border: 2px solid rgba(26, 145, 156, 0.25);
+}
+.btn.success {
+  background: var(--success);
+}
+/* NEW */
+.btn.danger {
+  background: #fff;
+  color: #c62828;
+  border: 2px solid #f3c1c1;
+}
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.btn:focus-visible,
+.navlinks a:focus-visible,
+.navlink-button:focus-visible {
+  outline: 3px solid #12304a;
+  outline-offset: 2px;
+}
+.small-btn {
+  padding: 5px 9px;
+  font-size: 0.85rem;
+}
+
+main {
+  flex: 1;
+  padding: 28px;
+  max-width: 1100px;
+  width: 100%;
+  margin: 20px auto;
+}
+section {
+  padding: 18px 0;
+}
+h1,
+h2 {
+  color: var(--primary);
+  margin: 6px 0 14px;
+}
+p.lead {
+  font-size: 1.05rem;
+  color: #12304a;
+  margin-bottom: 18px;
+}
+.hero {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 30px;
+  flex-wrap: wrap;
+  margin: 40px auto;
+  max-width: 900px;
+}
+.hero-card {
+  flex: 1;
+  /* FIX: was min-width: 450px, which overflowed phone screens */
+  min-width: min(450px, 100%);
+  max-width: 600px;
+  background: var(--card);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(10, 40, 80, 0.15);
+}
+.hero-card.wide {
+  flex: 1 1 100%;
+  max-width: 100%;
+}
+.hero h1 {
+  margin: 0 0 8px;
+}
+.quick-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+.stat-grid {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+}
+.stat {
+  background: linear-gradient(180deg, #b4dfe3, #b2e2e6);
+  padding: 10px;
+  border-radius: 8px;
+  flex: 1;
+  text-align: center;
+}
+.stat strong {
+  display: block;
+  font-size: 1.25rem;
+  color: var(--primary);
+}
+.card {
+  background: var(--card);
+  padding: 16px;
+  border-radius: 10px;
+  box-shadow: 0 6px 16px rgba(10, 40, 80, 0.06);
+  margin-bottom: 14px;
+}
+.form {
+  max-width: 600px;
+  margin: 0 auto;
+}
+label {
+  display: block;
+  margin: 8px 0 6px;
+  font-weight: 700;
+}
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="date"],
+input[type="time"],
+input[type="number"],
+input:not([type]),
+select,
+textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #d8dbe0;
+  background: #fff;
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th,
+td {
+  padding: 10px;
+  border-bottom: 1px solid #eef3f8;
+  text-align: left;
+  vertical-align: top;
+  color: #12304a;
+}
+th {
+  background: #f3f7fb;
+  color: var(--primary);
+}
+/* NEW: tables scroll sideways on small screens instead of breaking the page */
+.table-wrap {
+  overflow-x: auto;
+}
+.badge {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+.badge.new {
+  background: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+}
+/* Same final colours the prototype applied inline */
+.badge.enroute {
+  background: var(--primary);
+  color: #fff;
+  border: 1px solid #d8ebf7;
+}
+.badge.arrived {
+  background: var(--danger);
+  color: #fff;
+  border: 1px solid #ffd6d6;
+}
+.badge.complete {
+  background: var(--success);
+  color: #fff;
+}
+.small {
+  font-size: 0.9rem;
+  color: #4a6173;
+}
+.eta-value {
+  font-size: 1.2rem;
+  color: var(--danger);
+}
+footer {
+  background: #1a919c;
+  color: #fff;
+  text-align: center;
+  padding: 12px;
+  font-size: 0.9rem;
+  box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.2);
+  margin-top: 20px;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-top: 20px;
+}
+#services .card {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s;
+}
+#services .card:hover {
+  transform: translateY(-5px);
+}
+#services .card i {
+  font-size: 40px;
+  color: var(--primary);
+  margin-bottom: 12px;
+}
+#services .card h3 {
+  margin: 8px 0;
+  color: #12304a;
+}
+#services .card p {
+  font-size: 14px;
+  color: #333;
+}
+#about .card {
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #12304a;
+  line-height: 1.5;
+}
+#contact .card {
+  background-color: rgba(255, 255, 255, 0.9);
+  /* FIX: was a fixed 400px × 150px box */
+  max-width: 400px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  color: #12304a;
+}
+#booking .card {
+  /* FIX: was width: 600px; height: 350px, which clipped error messages */
+  max-width: 800px;
+  width: 100%;
+  padding: 30px;
+}
+#confirm .card {
+  max-width: 600px;
+  margin: 0 auto;
+  color: #12304a;
+}
+#confirm .card i {
+  color: var(--success);
+}
+.auth-card {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+.auth-column {
+  flex: 1;
+  min-width: min(280px, 100%);
+}
+
+/* NEW: User / Driver / Admin login choice */
+.role-picker {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.role-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 10px;
+  background: var(--card);
+  border: 2px solid transparent;
+  border-radius: 10px;
+  box-shadow: 0 6px 16px rgba(10, 40, 80, 0.06);
+  cursor: pointer;
+  font-family: inherit;
+  color: #12304a;
+  text-align: center;
+  transition: transform 0.2s, border-color 0.2s;
+}
+.role-option i {
+  font-size: 28px;
+  color: var(--primary);
+}
+.role-option strong {
+  font-size: 1.05rem;
+  color: var(--primary);
+}
+.role-option span {
+  font-size: 0.85rem;
+  color: #4a6173;
+}
+.role-option:hover {
+  transform: translateY(-3px);
+}
+.role-option.selected {
+  border-color: var(--primary);
+  background: #fff;
+}
+.role-option.selected i,
+.role-option.selected strong {
+  color: #12304a;
+}
+.role-option:focus-visible {
+  outline: 3px solid #12304a;
+  outline-offset: 2px;
+}
+.dashboard-tracking {
+  display: flex;
+  margin-bottom: 14px;
+}
+
+/* NEW: "Ambulance A101 has been assigned! ..." message on the user's booking card */
+.arrival-banner {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 14px 16px;
+  border-radius: 10px;
+  margin: 6px 0 14px;
+  border: 1px solid transparent;
+  color: #12304a;
+}
+.arrival-banner > i {
+  font-size: 30px;
+  margin-top: 2px;
+}
+.arrival-banner strong {
+  font-size: 1.15rem;
+}
+.arrival-banner p {
+  margin: 4px 0 0;
+}
+.arrival-contact a {
+  color: inherit;
+  font-weight: 700;
+}
+.arrival-banner.waiting {
+  background: #fff3cd;
+  border-color: #ffeeba;
+}
+.arrival-banner.waiting > i {
+  color: #856404;
+}
+.arrival-banner.assigned {
+  background: #e7f5f6;
+  border-color: var(--primary);
+}
+.arrival-banner.assigned > i,
+.arrival-banner.enroute > i {
+  color: var(--primary);
+}
+.arrival-banner.enroute {
+  background: #e7f5f6;
+  border-color: var(--primary);
+  border-left: 6px solid var(--danger);
+}
+.arrival-banner.arrived {
+  background: #e8f5e9;
+  border-color: var(--success);
+}
+.arrival-banner.arrived > i {
+  color: var(--success);
+}
+
+/* NEW: messages that replace alert() */
+.notice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  margin: 8px 0 12px;
+  font-weight: 600;
+  border: 1px solid transparent;
+}
+.notice.success {
+  background: #e8f5e9;
+  color: #1b5e20;
+  border-color: #c8e6c9;
+}
+.notice.error {
+  background: #fff0f0;
+  color: #7a1f1f;
+  border-color: #ffd6d6;
+}
+.notice.info {
+  background: #e7f5f6;
+  color: #0f5d64;
+  border-color: #b5d3d3;
+}
+.notice.flash {
+  position: sticky;
+  top: 76px;
+  z-index: 900;
+  box-shadow: 0 6px 16px rgba(10, 40, 80, 0.15);
+}
+.notice-close {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  font-size: 1rem;
+}
+.loading {
+  margin: 8px 0;
+}
+
+/* NEW: admin / driver controls */
+.action-row,
+.assign-controls {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 6px;
+}
+.assign-controls select {
+  width: auto;
+  min-width: 150px;
+  padding: 7px;
+}
+.action-row input {
+  width: auto;
+  padding: 7px;
+}
+input.eta-input {
+  width: 105px;
+}
+.inline-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid #eef3f8;
+}
+.inline-form h4 {
+  flex-basis: 100%;
+  margin: 0;
+  color: #12304a;
+}
+.inline-form input {
+  flex: 1 1 170px;
+  width: auto;
+}
+
+@media (max-width: 900px) {
+  .menu-toggle {
+    display: inline-block;
+  }
+  .navbar {
+    flex-wrap: wrap;
+  }
+  .navlinks {
+    display: none;
+    flex-basis: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+    padding-top: 10px;
+  }
+  .navlinks.open {
+    display: flex;
+  }
+  .navlink-button {
+    text-align: left;
+  }
+}
+@media (max-width: 600px) {
+  main {
+    padding: 16px;
+    margin: 8px auto;
+  }
+  .stat-grid,
+  .grid-2 {
+    display: flex;
+    flex-direction: column;
+  }
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+  .role-option span {
+    display: none;
+  }
+  .hero {
+    margin: 16px auto;
+  }
+  #booking .card {
+    padding: 18px;
+  }
+}
