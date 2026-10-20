@@ -34,7 +34,17 @@ export function createApp({ limits = {} } = {}) {
 
   if (config.trustProxy) app.set("trust proxy", config.trustProxy);
 
-  app.use(helmet()); // secure HTTP headers
+  // Secure HTTP headers. The Content-Security-Policy also allows the two image
+  // hosts the original design uses (background photo and logo).
+  app.use(
+    helmet({
+      contentSecurityPolicy: {
+        directives: {
+          "img-src": ["'self'", "data:", "https://t3.ftcdn.net", "https://cdn-icons-png.flaticon.com"],
+        },
+      },
+    }),
+  );
   app.use(
     cors({
       origin: config.clientUrls, // only our front end may call the API from a browser
